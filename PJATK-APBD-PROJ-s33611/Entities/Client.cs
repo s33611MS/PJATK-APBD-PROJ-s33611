@@ -15,6 +15,7 @@ public abstract class Client
     public string Email { get; set; } = string.Empty;
     [MaxLength(15)]
     public string PhoneNumber { get; set; } = string.Empty;
+    public bool IsDeleted { get; set; }
 }
 
 [Table("IndividualClients")]
@@ -26,7 +27,6 @@ public class IndividualClient : Client
     public string LastName { get; set; } = string.Empty;
     [MaxLength(11)]
     public string Pesel { get; set; } = string.Empty;
-    public bool IsDeleted { get; set; }
 }
 
 [Table("CompanyClients")]
