@@ -7,9 +7,7 @@ public interface IClientService
 {
     Task<IEnumerable<ClientResponseDto>> GetAllAsync(CancellationToken cancellationToken);
     Task<ClientResponseDto> GetByIdAsync(int id, CancellationToken cancellationToken);
-    Task<int> AddIndividualAsync(CreateIndividualClientDto dto, CancellationToken cancellationToken);
-    Task<int> AddCompanyAsync(CreateCompanyClientDto dto, CancellationToken cancellationToken);
-    Task UpdateIndividualAsync(int id, UpdateIndividualClientDto dto, CancellationToken cancellationToken);
-    Task UpdateCompanyAsync(int id, UpdateCompanyClientDto dto, CancellationToken cancellationToken);
+    Task<ClientResponseDto> AddAsync(CreateClientDto dto, CancellationToken cancellationToken);
+    Task UpdateAsync(int id, UpdateClientDto dto, CancellationToken cancellationToken);
     Task DeleteAsync(int id, CancellationToken cancellationToken);
 }

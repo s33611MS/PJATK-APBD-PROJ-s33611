@@ -7,4 +7,4 @@ public record CreateIndividualClientDto(
     string Address,
     string Email,
     string PhoneNumber
-    );
+    ) : CreateClientDto(Address, Email, PhoneNumber);

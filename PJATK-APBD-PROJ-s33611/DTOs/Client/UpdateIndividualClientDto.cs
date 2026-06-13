@@ -6,4 +6,4 @@ public record UpdateIndividualClientDto(
     string Address,
     string Email,
     string PhoneNumber
-    );
+    ) : UpdateClientDto(Address, Email, PhoneNumber);

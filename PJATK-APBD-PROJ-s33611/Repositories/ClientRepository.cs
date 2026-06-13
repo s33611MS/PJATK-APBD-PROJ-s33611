@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PJATK_APBD_PROJ_s33611.Data;
-using PJATK_APBD_PROJ_s33611.DTOs;
 using PJATK_APBD_PROJ_s33611.Entities;
 
 namespace PJATK_APBD_PROJ_s33611.Repositories;
@@ -21,20 +20,6 @@ public class ClientRepository(DatabaseContext ctx) : IClientRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IndividualClient?> GetIndividualByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        return await ctx.IndividualClients
-            .Where(c => c.Id == id && c.IsDeleted == false)
-            .FirstOrDefaultAsync(cancellationToken);
-    }
-
-    public async Task<CompanyClient?> GetCompanyByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        return await ctx.CompanyClients
-            .Where(c => c.Id == id && c.IsDeleted == false)
-            .FirstOrDefaultAsync(cancellationToken);
-    }
-
     public async Task AddAsync(Client request, CancellationToken cancellationToken)
     {
         ctx.Add(request);
@@ -49,11 +34,11 @@ public class ClientRepository(DatabaseContext ctx) : IClientRepository
 
     public async Task<bool> PeselExistsAsync(string pesel, CancellationToken cancellationToken)
     {
-        return await ctx.IndividualClients.AnyAsync(ic => ic.Pesel == pesel, cancellationToken);
+        return await ctx.IndividualClients.AnyAsync(c => c.Pesel == pesel, cancellationToken);
     }
 
     public async Task<bool> KrsExistsAsync(string krs, CancellationToken cancellationToken)
     {
-        return await ctx.CompanyClients.AnyAsync(cc => cc.Krs == krs, cancellationToken);
+        return await ctx.CompanyClients.AnyAsync(c => c.Krs == krs, cancellationToken);
     }
 }

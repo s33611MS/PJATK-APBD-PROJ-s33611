@@ -20,31 +20,31 @@ public class ClientsController(IClientService service) : ControllerBase
         return Ok(await service.GetByIdAsync(id, cancellationToken));
     }
     
-    [HttpPost("individual")]
+    [HttpPost("individuals")]
     public async Task<IActionResult> AddIndividual([FromBody] CreateIndividualClientDto request, CancellationToken cancellationToken)
     {
-        var id = await service.AddIndividualAsync(request, cancellationToken);
-        return CreatedAtAction(nameof(GetById), new { id }, id);
+        var client = await service.AddAsync(request, cancellationToken);
+        return CreatedAtAction(nameof(GetById), new { id = client.Id }, client);
     }
     
-    [HttpPost("company")]
+    [HttpPost("companies")]
     public async Task<IActionResult> AddCompany([FromBody] CreateCompanyClientDto request, CancellationToken cancellationToken)
     {
-        var id = await service.AddCompanyAsync(request, cancellationToken);
-        return CreatedAtAction(nameof(GetById), new { id }, id);
+        var client = await service.AddAsync(request, cancellationToken);
+        return CreatedAtAction(nameof(GetById), new { id = client.Id }, client);
     }
 
-    [HttpPut("individual/{id:int}")]
+    [HttpPut("individuals/{id:int}")]
     public async Task<IActionResult> UpdateIndividual([FromRoute] int id, [FromBody] UpdateIndividualClientDto request, CancellationToken cancellationToken)
     {
-        await service.UpdateIndividualAsync(id, request, cancellationToken);
+        await service.UpdateAsync(id, request, cancellationToken);
         return NoContent();
     }
     
-    [HttpPut("company/{id:int}")]
+    [HttpPut("companies/{id:int}")]
     public async Task<IActionResult> UpdateCompany([FromRoute] int id, [FromBody] UpdateCompanyClientDto request, CancellationToken cancellationToken)
     {
-        await service.UpdateCompanyAsync(id, request, cancellationToken);
+        await service.UpdateAsync(id, request, cancellationToken);
         return NoContent();
     }
 
