@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PJATK_APBD_PROJ_s33611.Data;
 
@@ -11,9 +12,11 @@ using PJATK_APBD_PROJ_s33611.Data;
 namespace PJATK_APBD_PROJ_s33611.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260613160154_fixSoftwareAndDiscount")]
+    partial class fixSoftwareAndDiscount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,8 +69,8 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("EndDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("FinalPrice")
                         .HasColumnType("decimal(10,2)");
@@ -81,11 +84,8 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
                     b.Property<int>("SoftwareVersionId")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatesInformation")
                         .IsRequired()
@@ -117,9 +117,6 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.HasKey("ContractId", "ClientId", "PaidAt");
 
                     b.HasIndex("ClientId");
@@ -140,8 +137,9 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("Offer")
-                        .HasColumnType("int");
+                    b.Property<string>("Offer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Percentage")
                         .HasColumnType("int");
@@ -251,8 +249,8 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateOnly>("NextRenewalDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("NextRenewalDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
@@ -263,8 +261,8 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
                     b.Property<int>("SoftwareId")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -295,8 +293,8 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
                     b.Property<DateTime>("PaidAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("SubscriptionId")
                         .HasColumnType("int");

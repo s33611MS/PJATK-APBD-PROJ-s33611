@@ -20,15 +20,15 @@ public class ClientRepository(DatabaseContext ctx) : IClientRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task AddAsync(Client request, CancellationToken cancellationToken)
+    public async Task AddAsync(Client client, CancellationToken cancellationToken)
     {
-        ctx.Add(request);
+        ctx.Add(client);
         await ctx.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UpdateAsync(Client request, CancellationToken cancellationToken)
+    public async Task UpdateAsync(Client client, CancellationToken cancellationToken)
     {
-        ctx.Update(request);
+        ctx.Update(client);
         await ctx.SaveChangesAsync(cancellationToken);
     }
 

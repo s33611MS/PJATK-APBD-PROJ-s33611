@@ -13,8 +13,12 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
-
 builder.Services.AddScoped<IClientService, ClientService>();
+
+builder.Services.AddScoped<IContractRepository, ContractRepository>();
+builder.Services.AddScoped<IContractService, ContractService>();
+
+builder.Services.AddScoped<ISoftwareRepository, SoftwareRepository>();
 
 builder.Services.AddDbContext<DatabaseContext>(opt =>
 {

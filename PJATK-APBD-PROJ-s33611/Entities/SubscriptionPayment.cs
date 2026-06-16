@@ -11,7 +11,7 @@ public class SubscriptionPayment
     [Column(TypeName =  "decimal(10,2)")]
     public decimal Amount { get; set; }
     public DateTime PaidAt { get; set; }
-    public DateTime StartDate { get; set; }
+    public DateOnly StartDate { get; set; }
     public int SubscriptionId { get; set; }
     public int ClientId { get; set; }
     

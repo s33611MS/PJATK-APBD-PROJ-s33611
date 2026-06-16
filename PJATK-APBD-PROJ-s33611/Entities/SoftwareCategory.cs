@@ -9,7 +9,7 @@ public class SoftwareCategory
     [Key]
     public int Id { get; set; }
     [MaxLength(100)]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = string.Empty;
     
-    public IEnumerable<Software> Software { get; set; } = new List<Software>();
+    public ICollection<Software> Software { get; set; } = new List<Software>();
 }

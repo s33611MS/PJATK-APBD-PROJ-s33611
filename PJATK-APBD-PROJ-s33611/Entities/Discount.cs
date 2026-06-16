@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PJATK_APBD_PROJ_s33611.Entities;
 
-public enum DiscountTarget
+public enum DiscountType
 {
     Contract,
     Subscription,
+    Both
 }
 
 [Table("Discounts")]
@@ -15,14 +16,10 @@ public class Discount
     [Key]
     public int Id { get; set; }
     [MaxLength(200)]
-    public string Name { get; set; } = null!;
-    public DiscountTarget DiscountTarget { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public DiscountType Offer { get; set; }
     [Range(0, 100)]
     public int Percentage { get; set; }
     public DateOnly ValidFrom { get; set; }
     public DateOnly ValidTo { get; set; }
-    public int SoftwareId { get; set; }
-
-    [ForeignKey(nameof(SoftwareId))]
-    public Software Software { get; set; } = null!;
 }

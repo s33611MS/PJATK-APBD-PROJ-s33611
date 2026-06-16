@@ -11,6 +11,7 @@ public class ExceptionHandler : IExceptionHandler
         {
             NotFoundException => StatusCodes.Status404NotFound,
             ConflictException => StatusCodes.Status409Conflict,
+            BadRequestException => StatusCodes.Status400BadRequest,
             //UnauthorizedException => StatusCodes.Status401Unauthorized,
             _ => StatusCodes.Status500InternalServerError
         };

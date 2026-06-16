@@ -9,7 +9,7 @@ public class SoftwareVersion
     [Key]
     public int Id { get; set; }
     [MaxLength(20)]
-    public string VersionNumber { get; set; } = null!;
+    public string VersionNumber { get; set; } = string.Empty;
     public int SoftwareId { get; set; }
     public DateTime ReleaseDate { get; set; }
     public bool IsCurrent { get; set; }
