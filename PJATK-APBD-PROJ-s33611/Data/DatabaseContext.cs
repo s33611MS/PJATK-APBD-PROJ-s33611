@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PJATK_APBD_PROJ_s33611.Entities;
+using PJATK_APBD_PROJ_s33611.Entities.Auth;
 
 namespace PJATK_APBD_PROJ_s33611.Data;
 
@@ -16,6 +17,9 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     public DbSet<SoftwareVersion> SoftwareVersions { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<SubscriptionPayment> SubscriptionPayments { get; set; }
+    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<UserRole> UserRoles { get; set; }
+    public virtual DbSet<Token> Tokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,6 +27,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         ConfigureClients(modelBuilder);
         ConfigureContracts(modelBuilder);
         ConfigureSubscriptions(modelBuilder);
+        ConfigureAuth(modelBuilder);
     }
     
     private static void ConfigureClients(ModelBuilder modelBuilder)
@@ -73,5 +78,19 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .WithMany()
             .HasForeignKey(x => x.ClientId)
             .OnDelete(DeleteBehavior.Restrict);
+    }
+
+    private static void ConfigureAuth(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>().HasIndex(x => x.Login).IsUnique();
+        
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.Token)
+            .WithOne(t => t.User)
+            .HasForeignKey<Token>(t => t.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Token>()
+            .HasIndex(x => x.RefreshToken).IsUnique();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PJATK_APBD_PROJ_s33611.DTOs.Contract;
 using PJATK_APBD_PROJ_s33611.Services;
 
@@ -6,6 +7,7 @@ namespace PJATK_APBD_PROJ_s33611.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ContractsController(IContractService service) : ControllerBase
 {
     [HttpGet]

@@ -78,6 +78,9 @@ public class ContractService(IContractRepository contractRepository, IClientRepo
 
         if (contract is null)
             throw new NotFoundException($"There is no Contract with id: {dto.ContractId}");
+        
+        if (contract.Status == ContractStatus.Cancelled)
+            throw new ConflictException($"Contract with id: {dto.ContractId} was cancelled");
 
         if (DateOnly.FromDateTime(DateTime.Today.Date) > contract.EndDate)
         {
@@ -86,6 +89,9 @@ public class ContractService(IContractRepository contractRepository, IClientRepo
         }
 
         var totalPaid = await contractRepository.GetTotalPaymentsAsync(contract.Id, cancellationToken);
+        
+        if (totalPaid == contract.FinalPrice)
+            throw new ConflictException("Contract already paid");
 
         if (totalPaid + dto.Amount > contract.FinalPrice)
         {

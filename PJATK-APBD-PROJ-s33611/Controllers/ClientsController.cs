@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PJATK_APBD_PROJ_s33611.DTOs.Client;
 using PJATK_APBD_PROJ_s33611.Services;
 
@@ -6,6 +7,7 @@ namespace PJATK_APBD_PROJ_s33611.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ClientsController(IClientService service) : ControllerBase
 {
     [HttpGet]
@@ -35,6 +37,7 @@ public class ClientsController(IClientService service) : ControllerBase
     }
 
     [HttpPut("individuals/{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateIndividual([FromRoute] int id, [FromBody] UpdateIndividualClientDto request, CancellationToken cancellationToken)
     {
         await service.UpdateAsync(id, request, cancellationToken);
@@ -42,6 +45,7 @@ public class ClientsController(IClientService service) : ControllerBase
     }
     
     [HttpPut("companies/{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateCompany([FromRoute] int id, [FromBody] UpdateCompanyClientDto request, CancellationToken cancellationToken)
     {
         await service.UpdateAsync(id, request, cancellationToken);
@@ -49,6 +53,7 @@ public class ClientsController(IClientService service) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
     {
         await service.DeleteAsync(id, cancellationToken);

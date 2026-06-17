@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PJATK_APBD_PROJ_s33611.Data;
 
@@ -11,9 +12,11 @@ using PJATK_APBD_PROJ_s33611.Data;
 namespace PJATK_APBD_PROJ_s33611.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260616200419_fixUserTokenRelation")]
+    partial class fixUserTokenRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,21 +27,32 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
 
             modelBuilder.Entity("PJATK_APBD_PROJ_s33611.Entities.Auth.Token", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
 
                     b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.HasKey("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RefreshToken")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tokens");
                 });
@@ -430,8 +444,8 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
             modelBuilder.Entity("PJATK_APBD_PROJ_s33611.Entities.Auth.Token", b =>
                 {
                     b.HasOne("PJATK_APBD_PROJ_s33611.Entities.Auth.User", "User")
-                        .WithOne("Token")
-                        .HasForeignKey("PJATK_APBD_PROJ_s33611.Entities.Auth.Token", "UserId")
+                        .WithMany("Tokens")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -575,7 +589,7 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
 
             modelBuilder.Entity("PJATK_APBD_PROJ_s33611.Entities.Auth.User", b =>
                 {
-                    b.Navigation("Token");
+                    b.Navigation("Tokens");
                 });
 
             modelBuilder.Entity("PJATK_APBD_PROJ_s33611.Entities.Auth.UserRole", b =>

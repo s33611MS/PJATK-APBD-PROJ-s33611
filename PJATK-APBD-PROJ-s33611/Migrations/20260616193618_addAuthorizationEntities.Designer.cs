@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PJATK_APBD_PROJ_s33611.Data;
 
@@ -11,9 +12,11 @@ using PJATK_APBD_PROJ_s33611.Data;
 namespace PJATK_APBD_PROJ_s33611.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260616193618_addAuthorizationEntities")]
+    partial class addAuthorizationEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -575,7 +578,8 @@ namespace PJATK_APBD_PROJ_s33611.Migrations
 
             modelBuilder.Entity("PJATK_APBD_PROJ_s33611.Entities.Auth.User", b =>
                 {
-                    b.Navigation("Token");
+                    b.Navigation("Token")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PJATK_APBD_PROJ_s33611.Entities.Auth.UserRole", b =>
