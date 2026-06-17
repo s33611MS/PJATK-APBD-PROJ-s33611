@@ -81,7 +81,7 @@ public class ClientService(IClientRepository repo) : IClientService
                 await repo.UpdateAsync(individual, cancellationToken);
                 break;
             case CompanyClient:
-                throw new ConflictException("You can't delete companies");
+                throw new BadRequestException("You can't delete companies");
         }
     }
 }
