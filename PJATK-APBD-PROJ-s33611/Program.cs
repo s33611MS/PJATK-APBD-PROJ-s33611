@@ -70,6 +70,9 @@ builder.Services.AddScoped<IContractService, ContractService>();
 
 builder.Services.AddScoped<ISoftwareRepository, SoftwareRepository>();
 
+builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
+builder.Services.AddScoped<IIncomeService, IncomeService>();
+
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
