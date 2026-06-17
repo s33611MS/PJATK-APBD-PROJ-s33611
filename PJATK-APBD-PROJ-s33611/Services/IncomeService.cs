@@ -1,19 +1,27 @@
-﻿using PJATK_APBD_PROJ_s33611.Entities;
+﻿using PJATK_APBD_PROJ_s33611.DTOs.Income;
+using PJATK_APBD_PROJ_s33611.Entities;
 using PJATK_APBD_PROJ_s33611.Exceptions;
 using PJATK_APBD_PROJ_s33611.Repositories;
 
 namespace PJATK_APBD_PROJ_s33611.Services;
 
-public class IncomeService(IIncomeRepository repo, ISoftwareRepository softwareRepository) : IIncomeService
+public class IncomeService(IIncomeRepository repo, ICurrencyService currencyService, ISoftwareRepository softwareRepository) : IIncomeService
 {
-    public async Task<decimal> GetAsync(int? softwareId, ContractStatus status, CancellationToken cancellationToken)
+    public async Task<IncomeResponseDto> GetAsync(int? softwareId, string? currencyCode, ContractStatus status, CancellationToken cancellationToken)
     {
         if (softwareId.HasValue)
         {
             if(await softwareRepository.GetByIdAsync(softwareId.GetValueOrDefault(), cancellationToken) == null)
                 throw new NotFoundException($"There is no software with id {softwareId}");
         }
+        
+        currencyCode ??= "PLN";
+        
+        var raw = await repo.GetAsync(softwareId, status, cancellationToken);
+        var currencyRate = await currencyService.GetExchangeRateAsync(currencyCode, cancellationToken);
+        
+        var result = Math.Round(raw/currencyRate, 2);
 
-        return await repo.GetAsync(softwareId, status, cancellationToken);
+        return new IncomeResponseDto(result, currencyRate, currencyCode);
     }
 }

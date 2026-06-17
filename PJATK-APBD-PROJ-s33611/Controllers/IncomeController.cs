@@ -11,14 +11,14 @@ namespace PJATK_APBD_PROJ_s33611.Controllers;
 public class IncomeController(IIncomeService service) : ControllerBase
 {
     [HttpGet("current")]
-    public async Task<IActionResult> GetCurrent([FromQuery] int? softwareId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCurrent([FromQuery] int? softwareId, [FromQuery] string? currencyCode,CancellationToken cancellationToken)
     {
-        return Ok(await service.GetAsync(softwareId, ContractStatus.Signed, cancellationToken));
+        return Ok(await service.GetAsync(softwareId, currencyCode, ContractStatus.Signed, cancellationToken));
     }
     
     [HttpGet("expected")]
-    public async Task<IActionResult> GetExpected([FromQuery] int? softwareId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetExpected([FromQuery] int? softwareId, [FromQuery] string? currencyCode,CancellationToken cancellationToken)
     {
-        return Ok(await service.GetAsync(softwareId, ContractStatus.Draft, cancellationToken));
+        return Ok(await service.GetAsync(softwareId, currencyCode, ContractStatus.Draft, cancellationToken));
     }
 }

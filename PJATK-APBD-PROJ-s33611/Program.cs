@@ -73,6 +73,9 @@ builder.Services.AddScoped<ISoftwareRepository, SoftwareRepository>();
 builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
 
+builder.Services.AddHttpClient<ICurrencyRepository, NbpCurrencyRepository>();
+builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
