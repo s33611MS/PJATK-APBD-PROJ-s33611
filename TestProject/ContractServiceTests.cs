@@ -81,7 +81,7 @@ public class ContractServiceTests
             .Setup(x => x.GetByIdAsync(It.IsAny<int>(),It.IsAny<CancellationToken>()))
             .ReturnsAsync((Contract?)null);
         
-        Func<Task> action = () => service.GetByIdAsync(1, CancellationToken.None);
+        Func<Task> action = async () => await service.GetByIdAsync(1, CancellationToken.None);
         
         await action.Should().ThrowAsync<NotFoundException>();
     }
@@ -141,7 +141,7 @@ public class ContractServiceTests
             .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Client?)null);
         
-        Func<Task> action = () => service.AddAsync(dto, CancellationToken.None);
+        Func<Task> action = async () => await service.AddAsync(dto, CancellationToken.None);
         
         await action.Should()
             .ThrowAsync<NotFoundException>()
@@ -163,7 +163,7 @@ public class ContractServiceTests
             .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Software?)null);
         
-        Func<Task> action = () => service.AddAsync(dto, CancellationToken.None);
+        Func<Task> action = async () => await service.AddAsync(dto, CancellationToken.None);
         
         await action.Should()
             .ThrowAsync<NotFoundException>()
@@ -189,7 +189,7 @@ public class ContractServiceTests
             .Setup(x => x.HasVersionAsync(1, 1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
         
-        Func<Task> action = () => service.AddAsync(dto, CancellationToken.None);
+        Func<Task> action = async () => await service.AddAsync(dto, CancellationToken.None);
         
         await action.Should()
             .ThrowAsync<NotFoundException>()
@@ -197,7 +197,7 @@ public class ContractServiceTests
     }
     
     [Fact]
-    public async Task AddContract_WhenActiveContractExists_ShouldThrow()
+    public async Task AddContract_WhenActiveAgreementExists_ShouldThrow()
     {
         var dto = ValidDto();
 
@@ -219,11 +219,11 @@ public class ContractServiceTests
             .Setup(x => x.HasActiveContractOrSubscriptionForSoftwareAsync(1, 1, new  DateOnly(2026, 1, 1), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
         
-        Func<Task> action = () => service.AddAsync(dto, CancellationToken.None);
+        Func<Task> action = async () => await service.AddAsync(dto, CancellationToken.None);
         
         await action.Should()
             .ThrowAsync<ConflictException>()
-            .WithMessage($"Client with id:{dto.ClientId} already has a contract or subscription for software with id:{dto.SoftwareId}");
+            .WithMessage($"Client with id: {dto.ClientId} already has contract or subscription for software with id: {dto.SoftwareId}");
     }
     
     [Fact]
@@ -264,25 +264,25 @@ public class ContractServiceTests
         .Setup(x => x.IsReturningClientAsync(1, It.IsAny<CancellationToken>()))
         .ReturnsAsync(true);
 
-    Contract? savedContract = null;
+    Contract? saved = null;
 
     _contractRepository
         .Setup(x => x.AddAsync(It.IsAny<Contract>(), It.IsAny<CancellationToken>()))
         .Callback<Contract, CancellationToken>((c, _) =>
         {
             c.Id = 1;
-            savedContract = c;
+            saved = c;
         });
 
     _contractRepository
         .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
         .ReturnsAsync(() =>
         {
-            savedContract!.Client = _client;
-            savedContract.Software = _software;
-            savedContract.SoftwareVersion = version;
+            saved!.Client = _client;
+            saved.Software = _software;
+            saved.SoftwareVersion = version;
 
-            return savedContract;
+            return saved;
         });
     
     var result = await service.AddAsync(dto, CancellationToken.None);
@@ -325,7 +325,7 @@ public class ContractServiceTests
             .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(contract);
 
-        Func<Task> action = () => service.AddPaymentAsync(new CreateContractPaymentDto(1, 100), CancellationToken.None);
+        Func<Task> action = async () => await service.AddPaymentAsync(new CreateContractPaymentDto(1, 100), CancellationToken.None);
 
         await action.Should()
             .ThrowAsync<ConflictException>()
@@ -347,7 +347,7 @@ public class ContractServiceTests
             .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(contract);
 
-        Func<Task> action = () => service.AddPaymentAsync(new CreateContractPaymentDto(1, 100), CancellationToken.None);
+        Func<Task> action = async () => await service.AddPaymentAsync(new CreateContractPaymentDto(1, 100), CancellationToken.None);
 
         await action.Should()
             .ThrowAsync<ConflictException>()
@@ -371,7 +371,7 @@ public class ContractServiceTests
             .Setup(x => x.GetTotalPaymentsAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(totalPaid);
 
-        Func<Task> action = () => service.AddPaymentAsync(new CreateContractPaymentDto(1, 1), CancellationToken.None);
+        Func<Task> action = async () => await service.AddPaymentAsync(new CreateContractPaymentDto(1, 1), CancellationToken.None);
 
         await action.Should()
             .ThrowAsync<ConflictException>()
@@ -393,7 +393,7 @@ public class ContractServiceTests
             .Setup(x => x.GetTotalPaymentsAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(totalPaid);
 
-        Func<Task> action = () => service.AddPaymentAsync(new CreateContractPaymentDto(1, 200), CancellationToken.None);
+        Func<Task> action = async () => await service.AddPaymentAsync(new CreateContractPaymentDto(1, 200), CancellationToken.None);
 
         await action.Should()
             .ThrowAsync<BadRequestException>()

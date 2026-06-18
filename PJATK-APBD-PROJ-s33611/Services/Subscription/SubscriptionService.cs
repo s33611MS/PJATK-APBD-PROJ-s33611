@@ -41,7 +41,7 @@ public class SubscriptionService(ISubscriptionRepository subscriptionRepository,
             throw new NotFoundException($"There is no Software with id: {dto.SoftwareId}");
         
         if(await agreementRepository.HasActiveContractOrSubscriptionForSoftwareAsync(dto.ClientId, dto.SoftwareId,dto.StartDate, cancellationToken))
-            throw new ConflictException($"Client with id:{dto.ClientId} already has contract or subscription for software with id:{dto.SoftwareId}");
+            throw new ConflictException($"Client with id: {dto.ClientId} already has contract or subscription for software with id: {dto.SoftwareId}");
         
         var softwarePrice = software.LicensePricePerYear / 12 * dto.RenewalPeriodInMonths;
         
@@ -58,7 +58,6 @@ public class SubscriptionService(ISubscriptionRepository subscriptionRepository,
         {
             Amount = finalPrice,
             ClientId = subscription.ClientId,
-            SubscriptionId = subscription.Id,
             PaidAt = DateTime.Now
         });
 

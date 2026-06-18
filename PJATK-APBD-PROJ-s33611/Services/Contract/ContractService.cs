@@ -48,7 +48,7 @@ public class ContractService(IContractRepository contractRepository, IAgreementR
             throw new NotFoundException($"There is no Software version with id: {dto.SoftwareVersionId} for Software with id: {dto.SoftwareId}");
         
         if(await agreementRepository.HasActiveContractOrSubscriptionForSoftwareAsync(dto.ClientId, dto.SoftwareId,dto.StartDate, cancellationToken))
-            throw new ConflictException($"Client with id:{dto.ClientId} already has contract or subscription for software with id:{dto.SoftwareId}");
+            throw new ConflictException($"Client with id: {dto.ClientId} already has contract or subscription for software with id: {dto.SoftwareId}");
         
         var discount = await agreementRepository.GetBestDiscountAsync(DiscountType.Contract, cancellationToken);
 
