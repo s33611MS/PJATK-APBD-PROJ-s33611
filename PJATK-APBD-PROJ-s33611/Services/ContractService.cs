@@ -56,13 +56,13 @@ public class ContractService(IContractRepository contractRepository, IClientRepo
         
         var finalPrice = (softwarePrice + dto.AdditionalSupportYears * 1000) * (100 - discount) / 100;
         
-        Console.WriteLine(finalPrice);
-        
         var contract = ContractMapper.ToEntity(dto, finalPrice);
 
         await contractRepository.AddAsync(contract, cancellationToken);
 
-        return await GetByIdAsync(contract.Id, cancellationToken);
+        var created = await contractRepository.GetByIdAsync(contract.Id, cancellationToken);
+
+        return ContractMapper.ToDto(created!);
     }
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken)

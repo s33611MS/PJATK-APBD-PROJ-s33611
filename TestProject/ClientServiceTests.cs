@@ -25,12 +25,12 @@ public class ClientServiceTests
             Email = "test@test.pl",
             PhoneNumber = "123456789"
         };
+        
+        var service = new ClientService(_clientRepository.Object);
 
         _clientRepository
             .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(client);
-
-        var service = new ClientService(_clientRepository.Object);
         
         var result = await service.GetByIdAsync(1, CancellationToken.None);
         
@@ -53,12 +53,12 @@ public class ClientServiceTests
             Email = "test@test.pl",
             PhoneNumber = "123456789"
         };
+        
+        var service = new ClientService(_clientRepository.Object);
 
         _clientRepository
             .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(client);
-
-        var service = new ClientService(_clientRepository.Object);
         
         var result = await service.GetByIdAsync(1, CancellationToken.None);
         
@@ -72,11 +72,11 @@ public class ClientServiceTests
     [Fact]
     public async Task GetById_WhenClientDoesNotExist_ShouldThrow()
     {
+        var service = new ClientService(_clientRepository.Object);
+        
         _clientRepository
             .Setup(x => x.GetByIdAsync(It.IsAny<int>(),It.IsAny<CancellationToken>()))
             .ReturnsAsync((Client?)null);
-
-        var service = new ClientService(_clientRepository.Object);
         
         Func<Task> action = () => service.GetByIdAsync(1, CancellationToken.None);
         
@@ -94,14 +94,14 @@ public class ClientServiceTests
             "test@test.pl",
             "123456789"
         );
+        
+        var service = new ClientService(_clientRepository.Object);
 
         Client? createdClient = null;
 
         _clientRepository
             .Setup(x => x.AddAsync(It.IsAny<Client>(), It.IsAny<CancellationToken>()))
             .Callback<Client, CancellationToken>((c, _) => createdClient = c);
-
-        var service = new ClientService(_clientRepository.Object);
         
         await service.AddAsync(dto, CancellationToken.None);
         
@@ -127,12 +127,12 @@ public class ClientServiceTests
             "test@test.pl",
             "123456789"
         );
+        
+        var service = new ClientService(_clientRepository.Object);
 
         _clientRepository
             .Setup(x => x.PeselExistsAsync(dto.Pesel, It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-
-        var service = new ClientService(_clientRepository.Object);
         
         Func<Task> action = () => service.AddAsync(dto, CancellationToken.None);
         
@@ -151,14 +151,14 @@ public class ClientServiceTests
             "test@test.pl",
             "123456789"
         );
+        
+        var service = new ClientService(_clientRepository.Object);
 
         Client? createdClient = null;
 
         _clientRepository
             .Setup(x => x.AddAsync(It.IsAny<Client>(), It.IsAny<CancellationToken>()))
             .Callback<Client, CancellationToken>((c, _) => createdClient = c);
-
-        var service = new ClientService(_clientRepository.Object);
         
         await service.AddAsync(dto, CancellationToken.None);
         
@@ -183,12 +183,12 @@ public class ClientServiceTests
             "test@test.pl",
             "123456789"
         );
+        
+        var service = new ClientService(_clientRepository.Object);
 
         _clientRepository
             .Setup(x => x.KrsExistsAsync(dto.Krs, It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-
-        var service = new ClientService(_clientRepository.Object);
         
         Func<Task> action = () => service.AddAsync(dto, CancellationToken.None);
         
@@ -210,10 +210,6 @@ public class ClientServiceTests
             Email = "test@test.pl",
             PhoneNumber = "123456789"
         };
-
-        _clientRepository
-            .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(client);
         
         var dto = new UpdateIndividualClientDto(
             "NewName",
@@ -222,14 +218,18 @@ public class ClientServiceTests
             "test@test.pl",
             "123456789"
         );
+        
+        var service = new ClientService(_clientRepository.Object);
+
+        _clientRepository
+            .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(client);
 
         Client? updatedClient = null;
 
         _clientRepository
             .Setup(x => x.UpdateAsync(It.IsAny<Client>(), It.IsAny<CancellationToken>()))
             .Callback<Client, CancellationToken>((c, _) => updatedClient = c);
-
-        var service = new ClientService(_clientRepository.Object);
         
         await service.UpdateAsync(1, dto, CancellationToken.None);
         
@@ -258,10 +258,6 @@ public class ClientServiceTests
             Email = "test@test.pl",
             PhoneNumber = "123456789"
         };
-
-        _clientRepository
-            .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(client);
         
         var dto = new UpdateCompanyClientDto(
             "NewName",
@@ -269,14 +265,18 @@ public class ClientServiceTests
             "test@test.pl",
             "123456789"
         );
-
-        var service = new ClientService(_clientRepository.Object);
         
-        Func<Task> action = () => service.UpdateAsync(1, dto, CancellationToken.None);
+        var service = new ClientService(_clientRepository.Object);
+
+        _clientRepository
+            .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(client);
+        
+        Func<Task> action = () => service.UpdateAsync(client.Id, dto, CancellationToken.None);
         
         await action.Should()
             .ThrowAsync<ConflictException>()
-            .WithMessage($"Client with id: 1 is of different type than requested body");
+            .WithMessage($"Client with id: {client.Id} is of different type than requested body");
     }
     
     [Fact]
@@ -287,12 +287,12 @@ public class ClientServiceTests
             Id = 1,
             IsDeleted = false
         };
+        
+        var service = new ClientService(_clientRepository.Object);
 
         _clientRepository
             .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(client);
-
-        var service = new ClientService(_clientRepository.Object);
         
         await service.DeleteAsync(1, CancellationToken.None);
         
@@ -310,12 +310,12 @@ public class ClientServiceTests
             CompanyName = "CompanyName",
             Krs = "123456789"
         };
+        
+        var service = new ClientService(_clientRepository.Object);
 
         _clientRepository
             .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(company);
-
-        var service = new ClientService(_clientRepository.Object);
         
         Func<Task> action = () => service.DeleteAsync(1, CancellationToken.None);
         
