@@ -15,7 +15,7 @@ public class NbpCurrencyRepository(HttpClient httpClient) : ICurrencyRepository
         }
         catch
         {
-            throw new BadRequestException($"{currencyCode.ToUpper()} is not a valid currency code");
+            return null;
         }
     }
 }

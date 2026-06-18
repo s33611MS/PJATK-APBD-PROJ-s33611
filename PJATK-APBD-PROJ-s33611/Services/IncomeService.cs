@@ -22,6 +22,6 @@ public class IncomeService(IIncomeRepository repo, ICurrencyService currencyServ
         
         var result = Math.Round(raw/currencyRate, 2);
 
-        return new IncomeResponseDto(result, currencyRate, currencyCode);
+        return new IncomeResponseDto(result, currencyRate, currencyCode.ToUpper());
     }
 }
