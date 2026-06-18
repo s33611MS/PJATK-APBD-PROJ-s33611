@@ -1,6 +1,6 @@
 ﻿using PJATK_APBD_PROJ_s33611.DTOs.Contract;
 
-namespace PJATK_APBD_PROJ_s33611.Services;
+namespace PJATK_APBD_PROJ_s33611.Services.Contract;
 
 public interface IContractService
 {

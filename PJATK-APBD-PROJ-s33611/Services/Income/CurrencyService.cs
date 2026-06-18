@@ -1,7 +1,7 @@
 ﻿using PJATK_APBD_PROJ_s33611.Exceptions;
-using PJATK_APBD_PROJ_s33611.Repositories;
+using PJATK_APBD_PROJ_s33611.Repositories.Income;
 
-namespace PJATK_APBD_PROJ_s33611.Services;
+namespace PJATK_APBD_PROJ_s33611.Services.Income;
 
 public class CurrencyService(ICurrencyRepository repo) : ICurrencyService
 {

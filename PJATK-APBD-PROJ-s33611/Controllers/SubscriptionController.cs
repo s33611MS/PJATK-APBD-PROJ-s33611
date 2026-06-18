@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PJATK_APBD_PROJ_s33611.DTOs.Contract;
+using PJATK_APBD_PROJ_s33611.DTOs.Subscription;
 using PJATK_APBD_PROJ_s33611.Services;
-using PJATK_APBD_PROJ_s33611.Services.Contract;
+using PJATK_APBD_PROJ_s33611.Services.Subscription;
 
 namespace PJATK_APBD_PROJ_s33611.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class ContractsController(IContractService service) : ControllerBase
+public class SubscriptionController(ISubscriptionService service) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
@@ -24,23 +24,16 @@ public class ContractsController(IContractService service) : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddIndividual([FromBody] CreateContractDto request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddIndividual([FromBody] CreateSubscriptionDto request, CancellationToken cancellationToken)
     {
         var client = await service.AddAsync(request, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = client.Id }, client);
     }
     
     [HttpPost("payments")]
-    public async Task<IActionResult> AddCompany([FromBody] CreateContractPaymentDto request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddCompany([FromBody] CreateSubscriptionPaymentDto request, CancellationToken cancellationToken)
     {
         await service.AddPaymentAsync(request, cancellationToken);
         return Created();
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
-    {
-        await service.DeleteAsync(id, cancellationToken);
-        return NoContent();
     }
 }

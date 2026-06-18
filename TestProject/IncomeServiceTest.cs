@@ -3,8 +3,9 @@ using Moq;
 using PJATK_APBD_PROJ_s33611.DTOs.Currency;
 using PJATK_APBD_PROJ_s33611.Entities;
 using PJATK_APBD_PROJ_s33611.Exceptions;
-using PJATK_APBD_PROJ_s33611.Repositories;
-using PJATK_APBD_PROJ_s33611.Services;
+using PJATK_APBD_PROJ_s33611.Repositories.Income;
+using PJATK_APBD_PROJ_s33611.Repositories.Software;
+using PJATK_APBD_PROJ_s33611.Services.Income;
 
 namespace TestProject;
 
@@ -30,14 +31,14 @@ public class IncomeServiceTest
         var service = CreateService();
         
         _incomeRepository
-            .Setup(x => x.GetAsync(null, ContractStatus.Signed, It.IsAny<CancellationToken>()))
+            .Setup(x => x.GetAsync(null, false, It.IsAny<CancellationToken>()))
             .ReturnsAsync(1000);
 
         _currencyService
             .Setup(x => x.GetExchangeRateAsync("PLN", It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
         
-        var result = await service.GetAsync(null, null, ContractStatus.Signed, CancellationToken.None);
+        var result = await service.GetAsync(null, null, false, CancellationToken.None);
         
         result.Income.Should().Be(1000);
         
@@ -48,7 +49,7 @@ public class IncomeServiceTest
     public async Task GetAsync_ShouldConvertCurrency()
     {
         _incomeRepository
-            .Setup(x => x.GetAsync(null, ContractStatus.Signed, It.IsAny<CancellationToken>()))
+            .Setup(x => x.GetAsync(null, false, It.IsAny<CancellationToken>()))
             .ReturnsAsync(1000);
 
         _currencyService
@@ -57,7 +58,7 @@ public class IncomeServiceTest
 
         var service = CreateService();
         
-        var result = await service.GetAsync(null, "EUR", ContractStatus.Signed, CancellationToken.None);
+        var result = await service.GetAsync(null, "EUR", false, CancellationToken.None);
         
         result.Income.Should().Be(250);
         result.CurrencyCode.Should().Be("EUR");
@@ -74,18 +75,18 @@ public class IncomeServiceTest
             .ReturnsAsync(new Software { Id = 1 });
 
         _incomeRepository
-            .Setup(x => x.GetAsync(1, ContractStatus.Signed, It.IsAny<CancellationToken>()))
+            .Setup(x => x.GetAsync(1, false, It.IsAny<CancellationToken>()))
             .ReturnsAsync(100);
 
         _currencyService
             .Setup(x => x.GetExchangeRateAsync("PLN", It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
         
-        var result = await service.GetAsync(1, null, ContractStatus.Signed, CancellationToken.None);
+        var result = await service.GetAsync(1, null, false, CancellationToken.None);
         
         result.Income.Should().Be(100);
         
-        _incomeRepository.Verify(x => x.GetAsync(1, ContractStatus.Signed, It.IsAny<CancellationToken>()), Times.Once);
+        _incomeRepository.Verify(x => x.GetAsync(1, false, It.IsAny<CancellationToken>()), Times.Once);
     }
     
     [Fact]
@@ -99,7 +100,7 @@ public class IncomeServiceTest
             .Setup(x => x.GetByIdAsync(1, It.IsAny<CancellationToken>()))
             .ReturnsAsync((Software?)null);
         
-        Func<Task> action = () => service.GetAsync(softwareId, null, ContractStatus.Signed, CancellationToken.None);
+        Func<Task> action = () => service.GetAsync(softwareId, null, false, CancellationToken.None);
         
         await action.Should()
             .ThrowAsync<NotFoundException>()

@@ -4,13 +4,19 @@ using PJATK_APBD_PROJ_s33611.DTOs.Contract;
 using PJATK_APBD_PROJ_s33611.Entities;
 using PJATK_APBD_PROJ_s33611.Exceptions;
 using PJATK_APBD_PROJ_s33611.Repositories;
+using PJATK_APBD_PROJ_s33611.Repositories.Agreement;
+using PJATK_APBD_PROJ_s33611.Repositories.Agreement.Contract;
+using PJATK_APBD_PROJ_s33611.Repositories.Client;
+using PJATK_APBD_PROJ_s33611.Repositories.Software;
 using PJATK_APBD_PROJ_s33611.Services;
+using PJATK_APBD_PROJ_s33611.Services.Contract;
 
 namespace TestProject;
 
 public class ContractServiceTests
 {
     private readonly Mock<IContractRepository> _contractRepository = new();
+    private readonly Mock<IAgreementRepository> _agreementRepository = new();
     private readonly Mock<IClientRepository> _clientRepository = new();
     private readonly Mock<ISoftwareRepository> _softwareRepository = new();
 
@@ -18,6 +24,7 @@ public class ContractServiceTests
     {
         return new ContractService(
             _contractRepository.Object,
+            _agreementRepository.Object,
             _clientRepository.Object,
             _softwareRepository.Object
             );
@@ -208,8 +215,8 @@ public class ContractServiceTests
             .Setup(x => x.HasVersionAsync(1, 1, It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
         
-        _contractRepository
-            .Setup(x => x.HasActiveContractForSoftwareAsync(1, 1, new  DateOnly(2026, 1, 1), It.IsAny<CancellationToken>()))
+        _agreementRepository
+            .Setup(x => x.HasActiveContractOrSubscriptionForSoftwareAsync(1, 1, new  DateOnly(2026, 1, 1), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
         
         Func<Task> action = () => service.AddAsync(dto, CancellationToken.None);
@@ -245,15 +252,15 @@ public class ContractServiceTests
         .Setup(x => x.HasVersionAsync(1, 1, It.IsAny<CancellationToken>()))
         .ReturnsAsync(true);
 
-    _contractRepository
-        .Setup(x => x.HasActiveContractForSoftwareAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<DateOnly>(), It.IsAny<CancellationToken>()))
+    _agreementRepository
+        .Setup(x => x.HasActiveContractOrSubscriptionForSoftwareAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<DateOnly>(), It.IsAny<CancellationToken>()))
         .ReturnsAsync(false);
 
-    _contractRepository
+    _agreementRepository
         .Setup(x => x.GetBestDiscountAsync(DiscountType.Contract, It.IsAny<CancellationToken>()))
         .ReturnsAsync(10);
 
-    _contractRepository
+    _agreementRepository
         .Setup(x => x.IsReturningClientAsync(1, It.IsAny<CancellationToken>()))
         .ReturnsAsync(true);
 

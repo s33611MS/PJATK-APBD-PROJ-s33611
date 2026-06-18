@@ -1,6 +1,6 @@
 ﻿using PJATK_APBD_PROJ_s33611.DTOs.Currency;
 
-namespace PJATK_APBD_PROJ_s33611.Repositories;
+namespace PJATK_APBD_PROJ_s33611.Repositories.Income;
 
 public interface ICurrencyRepository
 {

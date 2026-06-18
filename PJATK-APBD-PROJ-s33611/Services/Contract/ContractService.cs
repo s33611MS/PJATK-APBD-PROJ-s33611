@@ -2,11 +2,14 @@
 using PJATK_APBD_PROJ_s33611.Entities;
 using PJATK_APBD_PROJ_s33611.Exceptions;
 using PJATK_APBD_PROJ_s33611.Mappers;
-using PJATK_APBD_PROJ_s33611.Repositories;
+using PJATK_APBD_PROJ_s33611.Repositories.Agreement;
+using PJATK_APBD_PROJ_s33611.Repositories.Agreement.Contract;
+using PJATK_APBD_PROJ_s33611.Repositories.Client;
+using PJATK_APBD_PROJ_s33611.Repositories.Software;
 
-namespace PJATK_APBD_PROJ_s33611.Services;
+namespace PJATK_APBD_PROJ_s33611.Services.Contract;
 
-public class ContractService(IContractRepository contractRepository, IClientRepository clientRepository, ISoftwareRepository softwareRepository) : IContractService
+public class ContractService(IContractRepository contractRepository, IAgreementRepository agreementRepository, IClientRepository clientRepository, ISoftwareRepository softwareRepository) : IContractService
 {
     public async Task<IEnumerable<ContractResponseDto>> GetAllAsync(CancellationToken cancellationToken)
     {
@@ -44,12 +47,12 @@ public class ContractService(IContractRepository contractRepository, IClientRepo
         if (!await softwareRepository.HasVersionAsync(dto.SoftwareId, dto.SoftwareVersionId, cancellationToken))
             throw new NotFoundException($"There is no Software version with id: {dto.SoftwareVersionId} for Software with id: {dto.SoftwareId}");
         
-        if(await contractRepository.HasActiveContractForSoftwareAsync(dto.ClientId, dto.SoftwareId,dto.StartDate, cancellationToken))
-            throw new ConflictException($"Client with id:{dto.ClientId} already has a contract or subscription for software with id:{dto.SoftwareId}");
+        if(await agreementRepository.HasActiveContractOrSubscriptionForSoftwareAsync(dto.ClientId, dto.SoftwareId,dto.StartDate, cancellationToken))
+            throw new ConflictException($"Client with id:{dto.ClientId} already has contract or subscription for software with id:{dto.SoftwareId}");
         
-        var discount = await contractRepository.GetBestDiscountAsync(DiscountType.Contract, cancellationToken);
+        var discount = await agreementRepository.GetBestDiscountAsync(DiscountType.Contract, cancellationToken);
 
-        if (await contractRepository.IsReturningClientAsync(dto.ClientId, cancellationToken))
+        if (await agreementRepository.IsReturningClientAsync(dto.ClientId, cancellationToken))
             discount += 5;
         
         var softwarePrice = software.LicensePricePerYear;

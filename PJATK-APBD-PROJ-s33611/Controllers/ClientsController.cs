@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PJATK_APBD_PROJ_s33611.DTOs.Client;
 using PJATK_APBD_PROJ_s33611.Services;
+using PJATK_APBD_PROJ_s33611.Services.Client;
 
 namespace PJATK_APBD_PROJ_s33611.Controllers;
 

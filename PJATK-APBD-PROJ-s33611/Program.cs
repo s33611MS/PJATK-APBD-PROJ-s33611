@@ -6,9 +6,19 @@ using Microsoft.OpenApi.Models;
 using PJATK_APBD_PROJ_s33611.Data;
 using PJATK_APBD_PROJ_s33611.Exceptions;
 using PJATK_APBD_PROJ_s33611.Repositories;
+using PJATK_APBD_PROJ_s33611.Repositories.Agreement;
+using PJATK_APBD_PROJ_s33611.Repositories.Agreement.Contract;
+using PJATK_APBD_PROJ_s33611.Repositories.Agreement.Subscription;
 using PJATK_APBD_PROJ_s33611.Repositories.Auth;
+using PJATK_APBD_PROJ_s33611.Repositories.Client;
+using PJATK_APBD_PROJ_s33611.Repositories.Income;
+using PJATK_APBD_PROJ_s33611.Repositories.Software;
 using PJATK_APBD_PROJ_s33611.Services;
 using PJATK_APBD_PROJ_s33611.Services.Auth;
+using PJATK_APBD_PROJ_s33611.Services.Client;
+using PJATK_APBD_PROJ_s33611.Services.Contract;
+using PJATK_APBD_PROJ_s33611.Services.Income;
+using PJATK_APBD_PROJ_s33611.Services.Subscription;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,8 +75,13 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
 
+builder.Services.AddScoped<IAgreementRepository, AgreementRepository>();
+
 builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<IContractService, ContractService>();
+
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 builder.Services.AddScoped<ISoftwareRepository, SoftwareRepository>();
 

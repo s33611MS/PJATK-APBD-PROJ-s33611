@@ -1,7 +1,6 @@
 ﻿using PJATK_APBD_PROJ_s33611.DTOs.Currency;
-using PJATK_APBD_PROJ_s33611.Exceptions;
 
-namespace PJATK_APBD_PROJ_s33611.Repositories;
+namespace PJATK_APBD_PROJ_s33611.Repositories.Income;
 
 public class NbpCurrencyRepository(HttpClient httpClient) : ICurrencyRepository
 {

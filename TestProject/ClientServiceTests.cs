@@ -4,7 +4,9 @@ using PJATK_APBD_PROJ_s33611.DTOs.Client;
 using PJATK_APBD_PROJ_s33611.Entities;
 using PJATK_APBD_PROJ_s33611.Exceptions;
 using PJATK_APBD_PROJ_s33611.Repositories;
+using PJATK_APBD_PROJ_s33611.Repositories.Client;
 using PJATK_APBD_PROJ_s33611.Services;
+using PJATK_APBD_PROJ_s33611.Services.Client;
 
 namespace TestProject;
 

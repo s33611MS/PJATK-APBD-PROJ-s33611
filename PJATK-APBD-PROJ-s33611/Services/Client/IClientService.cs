@@ -1,7 +1,6 @@
-﻿using PJATK_APBD_PROJ_s33611.DTOs;
-using PJATK_APBD_PROJ_s33611.DTOs.Client;
+﻿using PJATK_APBD_PROJ_s33611.DTOs.Client;
 
-namespace PJATK_APBD_PROJ_s33611.Services;
+namespace PJATK_APBD_PROJ_s33611.Services.Client;
 
 public interface IClientService
 {

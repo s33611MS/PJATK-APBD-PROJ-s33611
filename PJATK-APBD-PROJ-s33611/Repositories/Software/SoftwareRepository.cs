@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PJATK_APBD_PROJ_s33611.Data;
-using PJATK_APBD_PROJ_s33611.Entities;
 
-namespace PJATK_APBD_PROJ_s33611.Repositories;
+namespace PJATK_APBD_PROJ_s33611.Repositories.Software;
 
 public class SoftwareRepository(DatabaseContext ctx) : ISoftwareRepository
 {
-    public async Task<Software?> GetByIdAsync(int id, CancellationToken cancellationToken)
+    public async Task<Entities.Software?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await ctx.Software
             .Where(s => s.Id == id)

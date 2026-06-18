@@ -1,13 +1,14 @@
 ﻿using PJATK_APBD_PROJ_s33611.DTOs.Income;
 using PJATK_APBD_PROJ_s33611.Entities;
 using PJATK_APBD_PROJ_s33611.Exceptions;
-using PJATK_APBD_PROJ_s33611.Repositories;
+using PJATK_APBD_PROJ_s33611.Repositories.Income;
+using PJATK_APBD_PROJ_s33611.Repositories.Software;
 
-namespace PJATK_APBD_PROJ_s33611.Services;
+namespace PJATK_APBD_PROJ_s33611.Services.Income;
 
 public class IncomeService(IIncomeRepository repo, ICurrencyService currencyService, ISoftwareRepository softwareRepository) : IIncomeService
 {
-    public async Task<IncomeResponseDto> GetAsync(int? softwareId, string? currencyCode, ContractStatus status, CancellationToken cancellationToken)
+    public async Task<IncomeResponseDto> GetAsync(int? softwareId, string? currencyCode, bool expected, CancellationToken cancellationToken)
     {
         if (softwareId.HasValue)
         {
@@ -17,7 +18,7 @@ public class IncomeService(IIncomeRepository repo, ICurrencyService currencyServ
         
         currencyCode ??= "PLN";
         
-        var raw = await repo.GetAsync(softwareId, status, cancellationToken);
+        var raw = await repo.GetAsync(softwareId, expected, cancellationToken);
         var currencyRate = await currencyService.GetExchangeRateAsync(currencyCode, cancellationToken);
         
         var result = Math.Round(raw/currencyRate, 2);

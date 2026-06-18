@@ -2,4 +2,5 @@
 
 public record CreateContractPaymentDto(
     int ContractId,
-    decimal Amount);
+    decimal Amount
+    );

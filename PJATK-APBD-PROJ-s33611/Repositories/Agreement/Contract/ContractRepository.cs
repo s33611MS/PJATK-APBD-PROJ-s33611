@@ -2,32 +2,32 @@
 using PJATK_APBD_PROJ_s33611.Data;
 using PJATK_APBD_PROJ_s33611.Entities;
 
-namespace PJATK_APBD_PROJ_s33611.Repositories;
+namespace PJATK_APBD_PROJ_s33611.Repositories.Agreement.Contract;
 
 public class ContractRepository(DatabaseContext ctx) : IContractRepository
 {
-    public async Task<IEnumerable<Contract>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Entities.Contract>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await ctx.Contracts
-            .Include(x => x.Client)
-            .Include(x => x.Software)
-            .ThenInclude(x => x.SoftwareCategory)
-            .Include(x => x.SoftwareVersion)
+            .Include(c => c.Client)
+            .Include(c => c.Software)
+            .ThenInclude(s => s.SoftwareCategory)
+            .Include(c => c.SoftwareVersion)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Contract?> GetByIdAsync(int id, CancellationToken cancellationToken)
+    public async Task<Entities.Contract?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await ctx.Contracts
             .Where(c => c.Id == id)
-            .Include(x => x.Client)
-            .Include(x => x.Software)
-            .ThenInclude(x => x.SoftwareCategory)
-            .Include(x => x.SoftwareVersion)
+            .Include(c => c.Client)
+            .Include(c => c.Software)
+            .ThenInclude(s => s.SoftwareCategory)
+            .Include(c => c.SoftwareVersion)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task AddAsync(Contract contract, CancellationToken cancellationToken)
+    public async Task AddAsync(Entities.Contract contract, CancellationToken cancellationToken)
     {
         ctx.Add(contract);
         await ctx.SaveChangesAsync(cancellationToken);
@@ -78,30 +78,6 @@ public class ContractRepository(DatabaseContext ctx) : IContractRepository
                     setters.SetProperty(c => c.Status, ContractStatus.Signed), 
                 cancellationToken
             );
-    }
-
-    public async Task<int> GetBestDiscountAsync(DiscountType discountType, CancellationToken cancellationToken)
-    {
-        var today = DateOnly.FromDateTime(DateTime.Today.Date);
-        var discounts = await ctx.Discounts
-            .Where(d => (d.Offer == discountType || d.Offer == DiscountType.Both) 
-                        && today >= d.ValidFrom 
-                        && today <= d.ValidTo)
-            .Select(d => d.Percentage)
-            .ToListAsync(cancellationToken);
-        
-        return discounts.Count != 0 ? discounts.Max() : 0;
-    }
-
-    public async Task<bool> IsReturningClientAsync(int clientId, CancellationToken cancellationToken)
-    {
-        return await ctx.Contracts.AnyAsync(c => c.ClientId == clientId && c.Status == ContractStatus.Signed, cancellationToken) || 
-               await ctx.Subscriptions.AnyAsync(s => s.ClientId == clientId, cancellationToken);
-    }
-
-    public async Task<bool> HasActiveContractForSoftwareAsync(int clientId, int softwareId, DateOnly startDate, CancellationToken cancellationToken)
-    {
-        return await ctx.Contracts.AnyAsync(c => c.ClientId == clientId && c.SoftwareId == softwareId && c.EndDate > startDate, cancellationToken);
     }
 
     public async Task AddPaymentAsync(ContractPayment contractPayment, CancellationToken cancellationToken)
